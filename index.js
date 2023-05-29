@@ -5,13 +5,10 @@ import {
   NativeModules,
   AppRegistry,
   requireNativeComponent,
+  View
 } from 'react-native';
-import { Header } from 'react-native-kindle';
-import { Provider } from 'react-redux';
-import App from './src/components/App';
-import store from './src/store';
-
-
+import App from './App';
+import { Header, Navigation, Button } from 'react-native-kindle';
 const KPPWindow = requireNativeComponent('KPPWindow');
 
 const WinMgrDrawMode = {
@@ -35,19 +32,26 @@ const WinMgrSensitiveLevel = {
   MODE_READER_IMAGE_HEAVY: 8,
 };
 
+function Home(props){
+  return (
+    <View 
+    style={{
+      justifyContent:"center",
+      alignItems:"center"
+    }}>
+      <Text style={{textAlign:"center",fontSize:30,fontWeight:"900",padding:40}}>Chess</Text>
+      <Button
+      title='New Game'
+      onPress={()=>{props.pushView({ title: 'Chess', view: <App /> });}}
+      ></Button>
+    </View>
+  )
 
-
-const Root = () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
-
-
-
-
+}
 
 function ReactNativeFrontEnd() {
+  const initalStack = [{ title: 'Home', view: <Home /> }];
+
   return (
     <KPPWindow
       key="mainWindow"
@@ -67,10 +71,9 @@ function ReactNativeFrontEnd() {
       accessibilityHint="Sample Application shows component features that K Plus Plus foundation provides."
       defaultFocus="demoNextWidgetButton"
     >
-      <Root />
+      <Navigation initalStack={initalStack} />
     </KPPWindow>
   );
 }
-
 
 AppRegistry.registerComponent('ReactNativeFrontEnd', () => ReactNativeFrontEnd);
